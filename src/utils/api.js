@@ -1,5 +1,5 @@
 import axios from "axios"
 
 export default axios.create({
-    baseURL: "https://backend-getapet.onrender.com",
+    baseURL: process.env.REACT_APP_URL_API,
 })
