@@ -9,10 +9,14 @@ import styles from "./Home.module.css"
 function Home(){
     const [pets, setPets] = useState([])
     useEffect(()=>{
-        api.get("/pets").then((response)=> {
+        api.get("/pets")
+        .then((response)=> {
             setPets(response.data.pets)
-        },[])
-    })
+        })
+        .catch((err)=> {
+            console.log(`Error ao buscar pelos pets: ${err.response.data.message}`)
+        })
+    },[])
     return (
         <section>
             <div className={styles.pet_home_header}>
@@ -22,16 +26,18 @@ function Home(){
             <div className={styles.pet_container}>
                 {pets.length > 0 && pets.map((pet)=> (
                     <div className={styles.pet_card} key={pet._id}>
-                        <div
-                            style={{
-                            backgroundImage: `url(${pet.images[0]})`,
-                            }}
-                            className={styles.pet_card_image}
-                        ></div>
-                        <h3>{pet.name}</h3>
-                        <p>
-                            <span className="bold">Peso:</span> {pet.weight}kg
-                        </p>
+                        <div className={styles.container_image}>
+                            <div
+                                style={{
+                                backgroundImage: `url(${pet.images[0]})`,
+                                }}
+                                className={styles.pet_card_image}
+                            ></div>
+                            <div className={styles.pet_name_header}>
+                                <h3>{pet.name}</h3>
+                                <p>Peso:{pet.weight}Kg</p>
+                            </div>
+                        </div>
                         {pet.available ? (<Link to={`pet/${pet._id}`}>Ver mais detalhes</Link>) : (
                             <p className={styles.adopted_text}>Pet ja adotado</p>
                         )}
