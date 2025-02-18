@@ -41,9 +41,12 @@
 }
 
 .menu_cell {
-    display: none;
+    display: block;
 }
 
+.menu_cell > p {
+    display: none;
+}
 
 @media (max-width: 768px) {
     .NavBar {
@@ -63,6 +66,7 @@
 
     .menu_cell > p {
         text-align: center;
+        display: block;
     }
     
 
