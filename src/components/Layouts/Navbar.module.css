@@ -18,13 +18,13 @@
     width: 40px;
 }
 
-.NavBar ul {
+.links {
     display: flex;
     list-style: none;
 }
 
-.NavBar li,
-.NavBar a {
+.links li,
+.links a {
     color:#16479d;
     text-decoration: none;
     padding: 1em; 
@@ -32,10 +32,72 @@
     border-radius: 10px;
 }
 
-.NavBar li:hover {
+.links li:hover {
     background-color: #16479d;
 }
 
-.NavBar li:hover > a {
+.links li:hover > a {
     color: #fff;
+}
+
+.menu_cell {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+    .NavBar {
+        padding: 5px;
+    }
+
+    .menu_cell {
+        display: block;
+        width:190px;
+        padding: 10px; 
+        color: #16479d;
+        transition: 0.5s;
+        border-radius: 10px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .menu_cell > p {
+        text-align: center;
+    }
+    
+
+    .links {
+        display: none;
+        align-items: center;
+        text-align: center;
+        list-style: none;
+        flex-direction: column;
+        position: absolute;
+        right: 0;
+        top:44.2px;
+        background-color: rgba(22, 22, 22, 0.863);
+    }
+
+    .menu_cell:hover{
+        background-color: #16489d6e;
+        border-radius: 10px;
+        color:#fff;
+    }
+    .links li,
+    .links a {
+    width: 100%;
+    color: #fff;
+    text-decoration: none;
+    padding: 1em; 
+    transition: .5s;
+    border-radius: 0px;
+    }
+
+    .links li:hover {
+        background-color: #474747;
+    }
+
+    .menu_cell:hover > .links {
+        display: flex;
+    }
 }
