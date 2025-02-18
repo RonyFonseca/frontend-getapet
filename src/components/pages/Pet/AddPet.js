@@ -7,10 +7,13 @@ import useFlashMessages from "../../../hooks/useFlashMessages"
 
 import FormPet from "../../form/FormPet"
 
+import Loading from "../../Layouts/Loading.js"
+
 function AddPet (){
     const [token] = useState(localStorage.getItem("token") ||"")
     const {setFlashMessage} = useFlashMessages()
     const navigate = useNavigate()
+    const [removeLoading, setRemoveLoading] = useState(false)
 
     const registerPet = async(pet) => {
         let type="success"
@@ -28,12 +31,14 @@ function AddPet (){
         })
 
         try{
+            setRemoveLoading(true)
             const data = await api.post("/pets/create", formData, {
                 headers:{
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 }
             }).then((response)=> {
+                setRemoveLoading(false)
                 return response.data
             }).catch((err) => {
                 msg = err.response.data.message
@@ -51,11 +56,14 @@ function AddPet (){
 
     return(
         <section>
-            <div className={styles.addpet_header}>
-                <h1>Cadastre seu pet</h1>
-                <p>Depois que cadastrar seu pet ficará disponível para adoção</p>
-            </div>
-            <FormPet handleSubmit={registerPet} btnText="Criar pet"/>
+            {removeLoading ? <Loading /> : 
+            <div>
+                <div className={styles.addpet_header}>
+                    <h1>Cadastre seu pet</h1>
+                    <p>Depois que cadastrar seu pet ficará disponível para adoção</p>
+                </div>
+                <FormPet handleSubmit={registerPet} btnText="Criar pet"/>
+            </div>}
         </section>
     )
 }

@@ -30,6 +30,7 @@ function useAuth(){
             type = "error"
         }
         setFlashMessage(msgText, type)
+        return true
     }
 
     async function authUser (data){
@@ -60,6 +61,7 @@ function useAuth(){
             type= "error"
         }
         setFlashMessage(msgText, type)
+        return true
     }
 
     return {loged,register,logout,login}

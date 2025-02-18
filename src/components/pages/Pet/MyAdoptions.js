@@ -5,10 +5,12 @@ import api from "../../../utils/api"
 import { useState,useEffect } from "react"
 
 import RoundedImage from "../../Layouts/RondedImage"
+import Loading from "../../Layouts/Loading.js"
 
 function MyAdoptions (){
     const [token] = useState(localStorage.getItem("token"))
     const [pets, setPets] = useState([])
+    const [removeLoading, setRemoveLoading] = useState(true)
 
     useEffect(()=> {
         api.get("/pets/myadopter", {
@@ -17,43 +19,47 @@ function MyAdoptions (){
             }
         }).then((response) => {
             setPets(response.data.petsAdopter)
+            setRemoveLoading(false)
         })
     },[token])
 
     return (
         <section>
-            <div className={styles.petslist_header}>
-                <h1>Minhas adoções</h1>
-            </div>
-            <div className={styles.petslist_container}>
-                {pets.length > 0 &&
-                pets.map((pet) => (
-                    <div key={pet._id} className={styles.petlist_row}>
-                    <RoundedImage
-                        src={`${pet.images[0]}`}
-                        alt={pet.name}
-                        width="px75"
-                    />
-                    <span className="bold">{pet.name}</span>
-                    <div className={styles.contacts}>
-                        <p>
-                        <span className="bold">Ligue para:</span> {pet.user.phone}
-                        </p>
-                        <p>
-                        <span className="bold">Fale com:</span> {pet.user.name}
-                        </p>
-                    </div>
-                    <div className={styles.actions}>
-                        {pet.available ? (
-                        <p>Adoção em processo</p>
-                        ) : (
-                        <p>Parabéns por concluir a adoção</p>
-                        )}
-                    </div>
-                    </div>
-                ))}
-                {pets.length === 0 && <p>Ainda não há pets adotados!</p>}
-            </div>
+            {removeLoading ? <Loading /> :
+            <div>
+                <div className={styles.petslist_header}>
+                    <h1>Minhas adoções</h1>
+                </div>
+                <div className={styles.petslist_container}>
+                    {pets.length > 0 &&
+                    pets.map((pet) => (
+                        <div key={pet._id} className={styles.petlist_row}>
+                        <RoundedImage
+                            src={`${pet.images[0]}`}
+                            alt={pet.name}
+                            width="px75"
+                        />
+                        <span className="bold">{pet.name}</span>
+                        <div className={styles.contacts}>
+                            <p>
+                            <span className="bold">Ligue para:</span> {pet.user.phone}
+                            </p>
+                            <p>
+                            <span className="bold">Fale com:</span> {pet.user.name}
+                            </p>
+                        </div>
+                        <div className={styles.actions}>
+                            {pet.available ? (
+                            <p>Adoção em processo</p>
+                            ) : (
+                            <p>Parabéns por concluir a adoção</p>
+                            )}
+                        </div>
+                        </div>
+                    ))}
+                    {pets.length === 0 && <p>Ainda não há pets adotados!</p>}
+                </div>
+            </div>}
         </section>
     )
 }

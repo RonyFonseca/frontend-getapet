@@ -10,20 +10,25 @@ import useFlashMessages from "../../../hooks/useFlashMessages"
 
 import styles from "./Dashboard.module.css"
 
+import Loading from "../../Layouts/Loading.js"
+
 function EditPet(){
     const [token] = useState(localStorage.getItem("token"))
     const [pet,setPet] = useState({})
     const {setFlashMessage} = useFlashMessages()
     const {id} = useParams()
 
+    const [removeLoading, setRemoveLoading] = useState(false)
+
     useEffect(() => {
+        setRemoveLoading(true)
         api.get(`/pets/${id}`, {
             headers:{
                 Authorization: `Bearer ${token}`
             }
         }).then((response) => {
             setPet(response.data.pet)
-
+            setRemoveLoading(false)
         })
     },[token,id])
 
@@ -45,6 +50,7 @@ function EditPet(){
 
         formData.append('pet', petFormData)
 
+        setRemoveLoading(true)
         const data = await api
         .patch(`pets/${pet._id}`, formData, {
             headers: {
@@ -54,6 +60,7 @@ function EditPet(){
         })
         .then((response) => {
             msg = response.data.message
+            setRemoveLoading(false)
             return response.data
         })
         .catch((err) => {
@@ -65,13 +72,16 @@ function EditPet(){
     }
     return (
         <section>
-            <div className={styles.addpet_header}>
-                <h1>Editando o pet: {pet.name}</h1>
-                <p>Depois da edição os dados serão atualizados no sistema.</p>
-            </div>
-            {pet.name && (
-                <FormPet handleSubmit={updatePet} btnText="Atualizar" petData={pet}/>
-            )}
+            {removeLoading ? <Loading /> : 
+            <div>
+                <div className={styles.addpet_header}>
+                    <h1>Editando o pet: {pet.name}</h1>
+                    <p>Depois da edição os dados serão atualizados no sistema.</p>
+                </div>
+                {pet.name && (
+                    <FormPet handleSubmit={updatePet} btnText="Atualizar" petData={pet}/>
+                )}
+            </div>}
         </section>
     )
 }
