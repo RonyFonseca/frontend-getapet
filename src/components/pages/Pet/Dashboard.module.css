@@ -50,6 +50,9 @@
 
 .actions {
     margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .actions a,
